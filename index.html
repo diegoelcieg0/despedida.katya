@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Despedida de Soltera · Katya</title>
+
+<!-- Preview en WhatsApp: cambia TUDOMINIO por tu URL real después de publicar -->
+<meta property="og:title" content="Despedida de Soltera · Katya">
+<meta property="og:description" content="Tienes una invitación. Toca para verla.">
+<meta property="og:image" content="https://TUDOMINIO.pages.dev/frente.webp">
+<meta property="og:type" content="website">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #e8dcc4;
+    background-image: radial-gradient(#d9cba8 1px, transparent 1px);
+    background-size: 24px 24px;
+    font-family: 'Courier New', monospace;
+    padding: 20px;
+    gap: 18px;
+  }
+
+  .scene {
+    width: min(92vw, 560px);
+    aspect-ratio: 3 / 2;
+    perspective: 1400px;
+    cursor: pointer;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(90, 60, 20, 0.35);
+  }
+
+  .face img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .back { transform: rotateY(180deg); }
+
+  .hint {
+    color: #a3541e;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    user-select: none;
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .error {
+    color: #a3541e;
+    text-align: center;
+    font-size: 15px;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+  <div class="card" id="card">
+    <div class="face front">
+      <img src="frente.webp" alt="Invitación">
+    </div>
+    <div class="face back">
+      <img id="reverso" src="" alt="Reverso">
+    </div>
+  </div>
+</div>
+<div class="hint" id="hint">Toca la tarjeta para girarla</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const invitada = (params.get('i') || '').toLowerCase().trim();
+  const card = document.getElementById('card');
+  const reverso = document.getElementById('reverso');
+  const scene = document.getElementById('scene');
+
+  if (invitada) {
+    reverso.src = 'reversos/' + invitada + '.webp';
+  }
+
+  // Si el reverso no existe, avisa en vez de mostrar imagen rota
+  reverso.onerror = () => {
+    document.body.innerHTML =
+      '<p class="error">No encontramos tu invitación.<br>Revisa que el link esté completo.</p>';
+  };
+
+  scene.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+    document.getElementById('hint').style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
